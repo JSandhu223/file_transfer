@@ -79,11 +79,13 @@ def main():
         print(f"Connected: {addr}")
 
         # Receive message from client
-        data = sock.recv(1024)
+        data = conn.recv(1024)
         message = data.decode()
 
         if message == 'q!':
             break
+
+        print(message)
     
     sock.close()
 
