@@ -1,5 +1,9 @@
 # File Transfer Program
 
-## Client
+## Running client
 
 `python3 client.py <HOSTNAME> <PORT>`
+
+## Running server
+
+`python3 server.py`
