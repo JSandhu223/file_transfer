@@ -78,14 +78,16 @@ def main():
         conn, addr = accept_conn(sock)
         print(f"Connected: {addr}")
 
-        # Receive message from client
-        data = conn.recv(1024)
-        message = data.decode()
+        # Poll client
+        while True:
+            # Receive message from client
+            data = conn.recv(1024)
+            message = data.decode()
 
-        if message == 'q!':
-            break
+            if message == 'quit':
+                break
 
-        print(message)
+            print(message)
     
     sock.close()
 

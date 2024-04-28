@@ -50,6 +50,7 @@ def create_socket():
 def connect_to_server(sock: socket, host: str, port: int):
     try:
         sock.connect((host, port))
+        print(f"Connected to {host}@{port}")
     except ConnectionError:
         print("Failed to connect to server")
         exit()
@@ -66,7 +67,12 @@ def main():
     sock = create_socket()
     connect_to_server(sock, host, port)
 
-    sock.send("hello".encode())
+    while True:
+        inp = input(">")
+        sock.send(inp.encode())
+        if inp == 'quit':
+            print("Goodbye")
+            break
 
     close_socket(sock)
 
