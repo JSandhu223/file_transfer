@@ -47,9 +47,9 @@ def create_socket():
         exit()
 
 
-def connect_to_server(sock: socket, hostname: str, port: int):
+def connect_to_server(sock: socket, host: str, port: int):
     try:
-        conn, addr = sock.connect((hostname, port))
+        conn, addr = sock.connect((host, port))
         return conn, addr
     except ConnectionError:
         print("Failed to connect to server")
@@ -62,10 +62,10 @@ def close_socket(sock: socket):
 
 def main():
     # Parse command line arguments
-    hostname, port = parse_args()
+    host, port = parse_args()
     # Create TCP socket
     sock = create_socket()
-    conn, addr = connect_to_server(sock, hostname, port)
+    conn, addr = connect_to_server(sock, host, port)
 
     close_socket(sock)
 
