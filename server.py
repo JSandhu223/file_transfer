@@ -7,6 +7,9 @@ import os # for system calls
 def cast_port(s: str):
     try:
         x = int(s)
+        # Port must be positive
+        if x <= 0:
+            return -1
         return x
     except ValueError:
         return -1
@@ -18,7 +21,7 @@ def parse_arg():
         exit()
     port = cast_port(sys.argv[1])
     if port == -1:
-        print("Invalid port")
+        print("Port must be a positive integer!")
         exit()
     return port
 
