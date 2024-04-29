@@ -1,6 +1,7 @@
 import sys
 import socket
 import platform # for determining host OS
+import os # for system calls
 
 
 def get_host_windows():
@@ -54,6 +55,24 @@ def accept_conn(sock: socket):
         exit()
 
 
+def recv_data(sock: socket):
+    try:
+        data = sock.recv(1024)
+        return data
+    except ConnectionError as e:
+        print("Connection error on recv()", e)
+        return None
+    except TimeoutError as e:
+        print("Timeout on recv()", e)
+        return None
+    except BlockingIOError as e:
+        print("BlockingIOError on recv()", e)
+        return None
+    except OSError as e:
+        print("Socket error on recv()")
+        return None
+
+
 def main():
     # os_platform = platform.system()
     # host = ''
@@ -81,12 +100,12 @@ def main():
         # Poll client
         while True:
             # Receive message from client
-            data = conn.recv(1024)
+            data = recv_data(conn)
+            if data == None:
+                break
             message = data.decode()
-
             if message == 'quit':
                 break
-
             print(message)
     
     sock.close()
