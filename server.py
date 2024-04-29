@@ -83,7 +83,7 @@ def main():
     #############################################
     # For now, allow anyone to communicate
     host = '0.0.0.0'
-    port = 8010
+    port = 8011
     #############################################
 
     # Create socket and bind
@@ -104,9 +104,11 @@ def main():
             if data == None:
                 break
             message = data.decode()
-            if message == 'quit':
+            if message == 'quit' or not message:
                 break
             print(message)
+        
+        print(f"{addr[0]} disconnected")
     
     sock.close()
 
