@@ -25,7 +25,7 @@ def valid_hostname(host: str):
 
 def parse_args():
     if len(sys.argv) != 3:
-        print("USAGE: python3 client.py <HOSTNAME> <PORT>")
+        print("USAGE: python3 client.py <HOST> <PORT>")
         exit()
     hostname = sys.argv[1]
     if not valid_hostname(hostname):

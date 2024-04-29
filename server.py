@@ -4,6 +4,25 @@ import platform # for determining host OS
 import os # for system calls
 
 
+def cast_port(s: str):
+    try:
+        x = int(s)
+        return x
+    except ValueError:
+        return -1
+
+
+def parse_arg():
+    if len(sys.argv) != 2:
+        print("USAGE: python3 server.py <PORT>")
+        exit()
+    port = cast_port(sys.argv[1])
+    if port == -1:
+        print("Invalid port")
+        exit()
+    return port
+
+
 def get_host_windows():
     hostname = socket.gethostname()
     # Usage: getaddrinfo(hostname, port)
@@ -83,7 +102,7 @@ def main():
     #############################################
     # For now, allow anyone to communicate
     host = '0.0.0.0'
-    port = 8011
+    port = parse_arg()
     #############################################
 
     # Create socket and bind
