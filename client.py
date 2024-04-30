@@ -2,6 +2,7 @@ import sys
 import socket
 import platform # for determining client's OS
 
+
 # Note: a string representation of a negative number should never be passed here.
 # This is for error handling the hostname and the port number, which are strictly positive.
 def cast_to_int(s: str):
@@ -67,6 +68,9 @@ def main():
     # Create TCP socket
     sock = create_socket()
     connect_to_server(sock, host, port)
+
+    # Also send the client's OS to the server
+    os_platform = platform.system()
 
     while True:
         inp = input(">")
