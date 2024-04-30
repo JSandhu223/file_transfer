@@ -117,9 +117,17 @@ def main():
         listen_conn(sock)
 
         conn, addr = accept_conn(sock)
-        print(f"Connected: {addr}")
 
-        # Poll client
+        # Receive client's OS information
+        data = recv_data(conn)
+        if data == None:
+            continue
+        client_os = data.decode()
+
+        # Log client connection
+        print(f"Connected: {addr} on {client_os}")
+
+        # Poll client for commands
         while True:
             # Receive message from client
             data = recv_data(conn)

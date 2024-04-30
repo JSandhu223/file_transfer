@@ -98,6 +98,11 @@ def main():
 
         # Send the client's OS to the server upon successful connection
         os_platform = platform.system()
+        if send_data(sock, os_platform.encode()) == None:
+            print(f"Disconnected from {host}@{port}")
+            close_socket(sock)
+            time.sleep(5)
+            continue
 
         while True:
             inp = input(">")
