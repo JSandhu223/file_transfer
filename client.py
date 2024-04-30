@@ -1,5 +1,6 @@
 import sys
 import socket
+import platform # for determining client's OS
 
 # Note: a string representation of a negative number should never be passed here.
 # This is for error handling the hostname and the port number, which are strictly positive.

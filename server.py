@@ -1,6 +1,6 @@
 import sys
 import socket
-import platform # for determining host OS
+import platform # for determining server's OS
 import os # for system calls
 
 
