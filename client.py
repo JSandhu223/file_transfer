@@ -58,6 +58,24 @@ def connect_to_server(sock: socket, host: str, port: int):
         exit()
 
 
+def send_data(sock: socket, data: bytes):
+    try:
+        sock.send(data)
+        return 0
+    except ConnectionError as e:
+        print("Connection error on send()", e)
+        return None
+    except TimeoutError as e:
+        print("Timeout on send()", e)
+        return None
+    except BlockingIOError as e:
+        print("BlockingIOError on send()", e)
+        return None
+    except OSError as e:
+        print("Socket error on send()")
+        return None
+
+
 def close_socket(sock: socket):
     sock.close()
 
@@ -74,7 +92,11 @@ def main():
 
     while True:
         inp = input(">")
-        sock.send(inp.encode())
+        send_status = send_data(sock, inp.encode())
+        if send_status == None:
+            print("(Error sending data)")
+            break
+        # sock.send(inp.encode())
         if inp == 'quit':
             print("Goodbye")
             break
