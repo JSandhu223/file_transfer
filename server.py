@@ -113,6 +113,15 @@ def recv_data(sock: socket):
         return None
 
 
+def send_cwd(conn: socket):
+    current_dir = os.getcwd()
+    # Send current directory to client
+    if send_data(conn, current_dir.encode()) == None:
+        print("Disconnected")
+        return -1
+    return 0
+
+
 def main():
     os_platform = platform.system()
     # host = ''
@@ -146,10 +155,8 @@ def main():
         print(f"Connected: {addr} on {client_os}")
 
         # Get current working directory
-        current_dir = os.getcwd()
-        # Send current directory to client
-        if send_data(conn, current_dir.encode()) == None:
-            print("Disconnected")
+        if send_cwd(conn) == -1:
+            print(f"{addr[0]} disconnected")
             continue
 
         # Poll client for commands
