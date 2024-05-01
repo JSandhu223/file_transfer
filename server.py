@@ -77,6 +77,24 @@ def accept_conn(sock: socket):
         exit()
 
 
+def send_data(sock: socket, data: bytes):
+    try:
+        sock.send(data)
+        return 0
+    except ConnectionError:
+        print("Connection error on send()")
+        return None
+    except TimeoutError:
+        print("Timeout on send()")
+        return None
+    except BlockingIOError:
+        print("BlockingIOError on send()")
+        return None
+    except OSError:
+        print("Socket error on send()")
+        return None
+
+
 def recv_data(sock: socket):
     try:
         data = sock.recv(1024)
