@@ -96,7 +96,7 @@ def recv_data(sock: socket):
 
 
 def main():
-    # os_platform = platform.system()
+    os_platform = platform.system()
     # host = ''
     # if os_platform == 'Windows':
     #     host = get_host_windows()
@@ -123,6 +123,9 @@ def main():
         if data == None:
             continue
         client_os = data.decode()
+ 
+        # Get current working directory
+        current_dir = os.getcwd()
 
         # Log client connection
         print(f"Connected: {addr} on {client_os}")
