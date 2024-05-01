@@ -121,9 +121,16 @@ def main():
             close_socket(sock)
             time.sleep(5)
             continue
+            
+        # Receive cwd of server
+        data = recv_data(sock)
+        if data == None:
+            print("Disconnected")
+            continue
+        current_dir = data.decode()
 
         while True:
-            inp = input(">")
+            inp = input(f"{current_dir}$ ")
             if send_data(sock, inp.encode()) == None:
                 print(f"Disconnected from {host}@{port}")
                 break

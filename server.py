@@ -141,12 +141,16 @@ def main():
         if data == None:
             continue
         client_os = data.decode()
- 
-        # Get current working directory
-        current_dir = os.getcwd()
 
         # Log client connection
         print(f"Connected: {addr} on {client_os}")
+
+        # Get current working directory
+        current_dir = os.getcwd()
+        # Send current directory to client
+        if send_data(conn, current_dir.encode()) == None:
+            print("Disconnected")
+            continue
 
         # Poll client for commands
         while True:
