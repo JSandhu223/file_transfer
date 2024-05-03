@@ -163,7 +163,7 @@ def main():
             message = data.decode()
             if message == 'quit' or not message:
                 break
-            print(message)
+            print(f"Received: {message}")
         
         print(f"{addr[0]} disconnected")
     

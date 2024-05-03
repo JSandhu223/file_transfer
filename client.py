@@ -130,9 +130,8 @@ def main():
             # sock.send(inp.encode())
             if inp == 'quit':
                 print("Goodbye")
-                break
-
-    close_socket(sock)
+                close_socket(sock)
+                exit()
 
 
 if __name__ == '__main__':
