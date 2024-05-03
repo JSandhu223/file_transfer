@@ -154,11 +154,6 @@ def main():
         # Log client connection
         print(f"Connected: {addr} on {client_os}")
 
-        # Get current working directory
-        if send_cwd(conn) == -1:
-            print(f"{addr[0]} disconnected")
-            continue
-
         # Poll client for commands
         while True:
             # Receive message from client
