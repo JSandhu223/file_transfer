@@ -127,7 +127,6 @@ def main():
             if send_data(sock, inp.encode()) == None:
                 print(f"Disconnected from {host}@{port}")
                 break
-            # sock.send(inp.encode())
             if inp == 'quit':
                 print("Goodbye")
                 close_socket(sock)
