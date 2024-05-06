@@ -162,8 +162,12 @@ def main():
                 break
             message = data.decode()
             if message == 'quit' or not message:
+                send_data(conn, hex(0).encode())
                 break
             print(f"Received: {message}")
+
+            if message == 'ls':
+                send_cwd(conn)
         
         print(f"{addr[0]} disconnected")
     

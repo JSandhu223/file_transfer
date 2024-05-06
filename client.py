@@ -131,7 +131,11 @@ def main():
                 print("Goodbye")
                 close_socket(sock)
                 exit()
-
+            data = recv_data(sock)
+            if data == None:
+                print(f"Disconnected from {host}@{port}")
+                break
+            print(data.decode())
 
 if __name__ == '__main__':
     main()
