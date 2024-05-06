@@ -166,7 +166,7 @@ def main():
                 break
             print(f"Received: {message}")
 
-            if message == 'ls':
+            if message == 'pwd':
                 send_cwd(conn)
         
         print(f"{addr[0]} disconnected")
