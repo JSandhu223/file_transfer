@@ -1,7 +1,30 @@
 import sys
 import socket
-import platform # for determining host OS
+import platform # for determining server's OS
 import os # for system calls
+import subprocess # for system calls
+
+
+def cast_port(s: str):
+    try:
+        x = int(s)
+        # Port must be positive
+        if x <= 0:
+            return -1
+        return x
+    except ValueError:
+        return -1
+
+
+def parse_arg():
+    if len(sys.argv) != 2:
+        print("USAGE: python3 server.py <PORT>")
+        exit()
+    port = cast_port(sys.argv[1])
+    if port == -1:
+        print("Port must be a positive integer!")
+        exit()
+    return port
 
 
 def get_host_windows():
@@ -55,6 +78,24 @@ def accept_conn(sock: socket):
         exit()
 
 
+def send_data(sock: socket, data: bytes):
+    try:
+        sock.send(data)
+        return 0
+    except ConnectionError:
+        print("Connection error on send()")
+        return None
+    except TimeoutError:
+        print("Timeout on send()")
+        return None
+    except BlockingIOError:
+        print("BlockingIOError on send()")
+        return None
+    except OSError:
+        print("Socket error on send()")
+        return None
+
+
 def recv_data(sock: socket):
     try:
         data = sock.recv(1024)
@@ -73,8 +114,21 @@ def recv_data(sock: socket):
         return None
 
 
+def send_cwd(conn: socket):
+    current_dir = os.getcwd()
+    # Send current directory to client
+    if send_data(conn, current_dir.encode()) == None:
+        print("Disconnected")
+        return -1
+    return 0
+
+
+def send_cwd_files(conn: socket):
+    pass
+
+
 def main():
-    # os_platform = platform.system()
+    os_platform = platform.system()
     # host = ''
     # if os_platform == 'Windows':
     #     host = get_host_windows()
@@ -83,7 +137,7 @@ def main():
     #############################################
     # For now, allow anyone to communicate
     host = '0.0.0.0'
-    port = 8011
+    port = parse_arg()
     #############################################
 
     # Create socket and bind
@@ -95,9 +149,17 @@ def main():
         listen_conn(sock)
 
         conn, addr = accept_conn(sock)
-        print(f"Connected: {addr}")
 
-        # Poll client
+        # Receive client's OS information
+        data = recv_data(conn)
+        if data == None:
+            continue
+        client_os = data.decode()
+
+        # Log client connection
+        print(f"Connected: {addr} on {client_os}")
+
+        # Poll client for commands
         while True:
             # Receive message from client
             data = recv_data(conn)
@@ -105,8 +167,15 @@ def main():
                 break
             message = data.decode()
             if message == 'quit' or not message:
+                send_data(conn, hex(0).encode())
                 break
-            print(message)
+            print(f"Received: {message}")
+
+            if message == 'pwd':
+                send_cwd(conn)
+            
+            if message == 'ls':
+                send_cwd_files(conn)
         
         print(f"{addr[0]} disconnected")
     
