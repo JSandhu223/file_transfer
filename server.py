@@ -2,6 +2,7 @@ import sys
 import socket
 import platform # for determining server's OS
 import os # for system calls
+import subprocess # for system calls
 
 
 def cast_port(s: str):
@@ -122,6 +123,10 @@ def send_cwd(conn: socket):
     return 0
 
 
+def send_cwd_files(conn: socket):
+    pass
+
+
 def main():
     os_platform = platform.system()
     # host = ''
@@ -168,6 +173,9 @@ def main():
 
             if message == 'pwd':
                 send_cwd(conn)
+            
+            if message == 'ls':
+                send_cwd_files(conn)
         
         print(f"{addr[0]} disconnected")
     
