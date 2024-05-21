@@ -176,7 +176,9 @@ def main():
 
             # If received command is invalid, ignore and continue polling client
             if message not in valid_commands:
-                print("Invalid command")
+                reponse = "Invalid command!"
+                send_data(conn, reponse.encode())
+                # print("Invalid command")
                 continue
 
             if message == 'pwd':
