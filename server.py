@@ -134,6 +134,9 @@ def main():
     #     host = get_host_windows()
     # else:
     #     host = get_host_linux()
+
+    valid_commands = ['ls', 'pwd', 'cd', 'download', 'quit']
+
     #############################################
     # For now, allow anyone to communicate
     host = '0.0.0.0'
@@ -166,10 +169,15 @@ def main():
             if data == None:
                 break
             message = data.decode()
+            print(f"Received: {message}") # DEBUG LINE
+
             if message == 'quit' or not message:
-                send_data(conn, hex(0).encode())
                 break
-            print(f"Received: {message}")
+
+            # If received command is invalid, ignore and continue polling client
+            if message not in valid_commands:
+                print("Invalid command")
+                continue
 
             if message == 'pwd':
                 send_cwd(conn)
@@ -177,6 +185,7 @@ def main():
             if message == 'ls':
                 send_cwd_files(conn)
         
+        # This is printed whenever the inner loop breaks
         print(f"{addr[0]} disconnected")
     
     sock.close()
