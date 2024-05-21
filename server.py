@@ -114,6 +114,11 @@ def recv_data(sock: socket):
         return None
 
 
+def list_dir(conn: socket, command: list[str]):
+    ls_output = subprocess.check_output(command)
+    send_data(conn, ls_output)
+
+
 def send_cwd(conn: socket):
     current_dir = os.getcwd()
     # Send current directory to client
@@ -121,11 +126,6 @@ def send_cwd(conn: socket):
         print("Disconnected")
         return -1
     return 0
-
-
-def send_cwd_files(conn: socket):
-    ls_output = subprocess.check_output(['ls'])
-    send_data(conn, ls_output)
 
 
 def transfer_file(conn: socket, file_name: str):
@@ -187,14 +187,16 @@ def main():
             message = data.decode()
             print(f"Received: {message}") # DEBUG LINE
 
-            if message == 'quit' or not message:
-                break
+            command = message.split()
 
-            elif message == 'pwd':
-                send_cwd(conn)
+            if command[0] == 'quit' or not message:
+                break
             
-            elif message == 'ls':
-                send_cwd_files(conn)
+            elif command[0] == 'ls':
+                list_dir(conn, command)
+
+            elif command[0] == 'pwd':
+                send_cwd(conn)
 
             # elif message == 'download':
             #     transfer_file(conn)
