@@ -128,6 +128,23 @@ def send_cwd_files(conn: socket):
     send_data(conn, ls_output)
 
 
+def transfer_file(conn: socket, file_name: str):
+    try:
+        file = open(file_name, 'rb')
+        return file
+    except OSError:
+        print("Failed to open file. Check file name!")
+    
+    # Read the file
+    chunk_size = 1024
+    while True:
+        chunk = file.read(chunk_size)
+        # Check if EOF if reached
+        if not chunk:
+            break
+        send_data(conn, chunk)
+
+
 def main():
     os_platform = platform.system()
     # host = ''
@@ -135,8 +152,6 @@ def main():
     #     host = get_host_windows()
     # else:
     #     host = get_host_linux()
-
-    valid_commands = ['ls', 'pwd', 'cd', 'download', 'quit']
 
     #############################################
     # For now, allow anyone to communicate
@@ -175,18 +190,20 @@ def main():
             if message == 'quit' or not message:
                 break
 
-            # If received command is invalid, ignore and continue polling client
-            if message not in valid_commands:
-                reponse = "Invalid command!"
-                send_data(conn, reponse.encode())
-                # print("Invalid command")
-                continue
-
-            if message == 'pwd':
+            elif message == 'pwd':
                 send_cwd(conn)
             
-            if message == 'ls':
+            elif message == 'ls':
                 send_cwd_files(conn)
+
+            # elif message == 'download':
+            #     transfer_file(conn)
+
+            else:
+                # If received command is invalid, ignore and continue polling client
+                reponse = "Invalid command!"
+                send_data(conn, reponse.encode())
+                continue
         
         # This is printed whenever the inner loop breaks
         print(f"{addr[0]} disconnected")
