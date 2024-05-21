@@ -124,7 +124,8 @@ def send_cwd(conn: socket):
 
 
 def send_cwd_files(conn: socket):
-    pass
+    ls_output = subprocess.check_output(['ls'])
+    send_data(conn, ls_output)
 
 
 def main():
