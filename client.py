@@ -127,15 +127,19 @@ def main():
             if send_data(sock, inp.encode()) == None:
                 print(f"Disconnected from {host}@{port}")
                 break
-            if inp == 'quit':
+            inp = inp.split()
+            if inp[0] == 'quit':
                 print("Goodbye")
                 close_socket(sock)
                 exit()
-            data = recv_data(sock)
-            if data == None:
-                print(f"Disconnected from {host}@{port}")
-                break
-            print(data.decode())
+            elif inp[0] == 'download':
+                pass
+            else:
+                data = recv_data(sock)
+                if data == None:
+                    print(f"Disconnected from {host}@{port}")
+                    break
+                print(data.decode())
 
 
 if __name__ == '__main__':
