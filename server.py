@@ -1,4 +1,5 @@
 import sys
+import time
 import socket
 import platform # for determining server's OS
 import os # for system calls
@@ -130,19 +131,23 @@ def send_cwd(conn: socket):
 
 def transfer_file(conn: socket, file_name: str):
     try:
-        file = open(file_name, 'rb')
-        return file
+        file = open(f"in/{file_name}", 'rb')
+        # Read the file
+        chunk_size = 1024
+        while True:
+            # TODO: error handle read()
+            chunk = file.read(chunk_size)
+            # Check if EOF if reached
+            if not chunk:
+                eot = b'\x04'
+                send_data(conn, eot)
+                break
+            time.sleep(1)
+            send_data(conn, chunk)
+        
+        file.close()
     except OSError:
-        print("Failed to open file. Check file name!")
-    
-    # Read the file
-    chunk_size = 1024
-    while True:
-        chunk = file.read(chunk_size)
-        # Check if EOF if reached
-        if not chunk:
-            break
-        send_data(conn, chunk)
+        print(f"Failed to open file '{file_name}'. Check file name!")
 
 
 def main():
@@ -198,8 +203,9 @@ def main():
             elif command[0] == 'pwd':
                 send_cwd(conn)
 
-            # elif message == 'download':
-            #     transfer_file(conn)
+            elif message[0] == 'download':
+                file_name = message[1]
+                transfer_file(conn, file_name)
 
             else:
                 # If received command is invalid, ignore and continue polling client
