@@ -95,6 +95,25 @@ def recv_data(sock: socket):
         return None
 
 
+def recv_file(sock: socket, file_name: str):
+    try:
+        file = open(f"out/{file_name}", 'wb')
+        while True:
+            data = recv_data(sock)
+            # Check if received EOT code
+            if data == b'\x04' or not data:
+                break
+            print("Received 1024 bytes")
+            # TODO: error handle write()
+            file.write(data)
+    
+        file.close()
+        
+        print("File downloaded successfully.")
+    except OSError:
+        print(f"Failed to create/overwrite file '{file_name}'.")
+
+
 def close_socket(sock: socket):
     sock.close()
 
@@ -127,15 +146,20 @@ def main():
             if send_data(sock, inp.encode()) == None:
                 print(f"Disconnected from {host}@{port}")
                 break
-            if inp == 'quit':
+            inp = inp.split()
+            if inp[0] == 'quit':
                 print("Goodbye")
                 close_socket(sock)
                 exit()
-            data = recv_data(sock)
-            if data == None:
-                print(f"Disconnected from {host}@{port}")
-                break
-            print(data.decode())
+            elif inp[0] == 'download':
+                file_name = inp[1]
+                recv_file(sock, file_name)
+            else:
+                data = recv_data(sock)
+                if data == None:
+                    print(f"Disconnected from {host}@{port}")
+                    break
+                print(data.decode())
 
 
 if __name__ == '__main__':
