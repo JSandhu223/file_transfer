@@ -15,15 +15,16 @@ int main(int argc, char** argv)
     char hostname[] = "localhost";
     uint16_t port = 8020; // 2 bytes (just to be safe)
 
-    // Address info
+    // This structure contains the address information for which the client will connect to
     struct sockaddr_in server_addr;
-
     // Zero out the struct
     memset(&server_addr, 0, sizeof(server_addr));
     // Set family to IPv4
     server_addr.sin_family = AF_INET;
     // Set port number (in network byte order / big endian)
     server_addr.sin_port = htons(port);
+    // Set hostname (as a long)
+    server_addr.sin_addr.s_addr = inet_addr("127.0.0.1"); // loopback address for now
 
     // DEBUG LINES
     printf("Family: %d\n", server_addr.sin_family);
