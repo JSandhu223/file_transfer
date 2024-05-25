@@ -11,6 +11,11 @@
 
 int main(int argc, char** argv)
 {
+    if (argc != 3)
+    {
+        printf("Usage: ./client <HOST> <PORT>\n");
+        exit(1);
+    }
     // TODO: get hostname and port from command line
     char hostname[] = "localhost";
     uint16_t port = 8020; // 2 bytes (just to be safe)
