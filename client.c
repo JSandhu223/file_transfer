@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 #include <string.h>
 #include <stdint.h>
 #include <arpa/inet.h>
@@ -26,6 +27,17 @@ int main(int argc, char** argv)
     // DEBUG LINES
     printf("Family: %d\n", server_addr.sin_family);
     printf("Port: %d\n", server_addr.sin_port);
+
+    // Create TCP socket
+    int sock = socket(PF_INET, SOCK_STREAM, 0);
+    if (sock == -1)
+    {
+        printf("Error creating socket\n");
+    }
+    printf("Socket created\n");
+
+    // Close socket
+    close(sock);
 
     return 0;
 }
