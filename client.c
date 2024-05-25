@@ -28,13 +28,19 @@ int main(int argc, char** argv)
     printf("Family: %d\n", server_addr.sin_family);
     printf("Port: %d\n", server_addr.sin_port);
 
-    // Create TCP socket
+    // Create socket with arguments: IPv4, stream socket, TCP protocol
     int sock = socket(PF_INET, SOCK_STREAM, 0);
     if (sock == -1)
     {
         printf("Error creating socket\n");
     }
     printf("Socket created\n");
+
+    // Connect to server
+    if (connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1)
+    {
+        printf("Failed to connect\n");
+    }
 
     // Close socket
     close(sock);
