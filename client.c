@@ -35,6 +35,7 @@ int main(int argc, char** argv)
     if (sock == -1)
     {
         printf("Error creating socket\n");
+        exit(1);
     }
     printf("Socket created\n");
 
@@ -42,6 +43,7 @@ int main(int argc, char** argv)
     if (connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1)
     {
         printf("Failed to connect\n");
+        exit(1);
     }
 
     // Close socket
